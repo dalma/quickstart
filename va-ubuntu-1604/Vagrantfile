@@ -1,0 +1,30 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VMNAME = File.basename(Dir.getwd)
+
+Vagrant.configure(2) do |config|
+    config.vm.box = "puppetlabs/ubuntu-16.04-64-nocm"
+    config.vm.box_check_update = false
+    config.vm.hostname = "#{VMNAME}.vagrant.local"
+    config.vm.provider :virtualbox do |vb|
+        vb.name = VMNAME
+        vb.gui = false
+        vb.cpus = 1
+        vb.memory = 512
+    end
+
+    config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
+
+    # plugin conflict
+    if Vagrant.has_plugin?("vagrant-vbguest") then
+        config.vbguest.auto_update = false
+    end
+
+    config.vm.provision "shell", inline: <<-SHELL
+        date && lsb_release -a
+        echo "***********************************************************"
+        echo "--- WELCOME! Please run \"vagrant ssh\" to log into the VM! ---"
+        echo "***********************************************************"
+    SHELL
+end
