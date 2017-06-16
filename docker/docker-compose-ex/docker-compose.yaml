@@ -1,0 +1,14 @@
+web:
+    build: .
+    command:
+       python app.py
+    ports:
+       - "5000:5000"
+    volumes:
+       - .:/code
+    links:
+       - redis
+    container_name: docker-compose-ex-web
+redis:  
+    image: redis
+    container_name: docker-compose-ex-redis
