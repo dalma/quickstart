@@ -4,7 +4,8 @@
 VMNAME = File.basename(Dir.getwd)
 
 Vagrant.configure(2) do |config|
-    config.vm.box = "puppetlabs/centos-7.2-64-nocm"
+    #config.vm.box = "puppetlabs/centos-7.2-64-nocm"
+    config.vm.box = "centos/7"
     config.vm.box_check_update = false
     config.vm.hostname = "#{VMNAME}.vagrant.local"
     config.vm.provider :virtualbox do |vb|
