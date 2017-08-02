@@ -1,0 +1,30 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VMNAME = File.basename(Dir.getwd)
+
+Vagrant.configure(2) do |config|
+    config.vm.box = "envimation/ubuntu-xenial"
+    config.vm.box_url = "https://vagrantcloud.com/envimation/boxes/ubuntu-xenial/versions/1.0.3-1501648475/providers/vmware_desktop.box"
+    config.vm.box_check_update = false
+    config.vm.hostname = "#{VMNAME}.local"
+    config.vm.provider "vmware_fusion" do |vm|
+        vm.name = VMNAME
+        vm.gui = false
+        vm.cpus = 1
+        vm.memory = 512
+    end
+
+    # plugin conflict
+    if Vagrant.has_plugin?("vagrant-vbguest") then
+        config.vbguest.auto_update = false
+    end
+
+    config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
+    config.vm.provision "shell", inline: <<-SHELL
+        echo "***********************************************************"
+        uptime
+        echo "--- WELCOME! Please run \"vagrant ssh\" to log into the VM! ---"
+        echo "***********************************************************"
+    SHELL
+end
